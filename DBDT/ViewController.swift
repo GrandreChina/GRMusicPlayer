@@ -10,6 +10,7 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 import MediaPlayer
+import AVFoundation
 
 class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate,HTTPProtocol{
     
@@ -80,7 +81,11 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
         }
         
     }
-
+//*****************************************
+//按钮的动画
+//
+//
+//*****************************************
     func objectAnimate(object:AnyObject){
         
             let keyAnimate = CAKeyframeAnimation(keyPath: "transform.rotation")
@@ -110,13 +115,10 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
 //        animate屏保()
 //    }
     func animate屏保(){
-        let keyAni = CAKeyframeAnimation(keyPath: "position")
+       
         let path = UIBezierPath()
         let point = UIScreen.mainScreen().bounds.size
         path.moveToPoint(CGPointMake(point.width/2, point.height))
-        print(btnOrderGet.center)
-        print(UIScreen.mainScreen().bounds.size)
-        
         
         //这是二次贝塞尔曲线的接口，利用此接口，可以定义一条贝塞尔曲线轨迹
         path.addCurveToPoint(CGPointMake(point.width/2, point.height - 300), controlPoint1: CGPointMake(point.width/2 - 50, point.height - 75), controlPoint2: CGPointMake(point.width/2 + 50 , point.height - 225))
@@ -152,18 +154,27 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
     
     var imageCache = [String:UIImage]()
     
-    let audioPlayer = MPMoviePlayerController()
-//    var audioPlayer: AVAudioPlayer!
+//    let audioPlayer = MPMoviePlayerController()
+    var audioPlayer :AVPlayer!
+    var playItem:AVPlayerItem!
+    
     var timer:NSTimer?
     
     var cellIndex:Int = 0
-    
+//*****************************************
+//接受到url后音乐播放
+//
+//
+//*****************************************
     func musicPlayerGR(index: Int){
         let url =  gequData[index]["url"].string!
-//        audioPlayer = try? AVAudioPlayer(contentsOfURL: NSURL(string: url)!)
-        audioPlayer.stop()
-        audioPlayer.contentURL = NSURL(string: url)
-        
+
+//        audioPlayer.stop()
+//        audioPlayer.contentURL = NSURL(string: url)
+//        audioPlayer.play()
+//        
+        playItem =  AVPlayerItem(URL: NSURL(string: url)!)
+        audioPlayer = AVPlayer(playerItem: playItem)
         audioPlayer.play()
         
         timer?.invalidate()
@@ -178,11 +189,12 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
 
     
     func update(){
-        let c = audioPlayer.currentPlaybackTime
-//        let c = audioPlayer.currentTime
+//        let c = audioPlayer.currentPlaybackTime
+        let c = audioPlayer.currentTime().seconds
         var time = ""
         if c > 0.0{  // c>0.0 必须判断
-            let t = audioPlayer.duration
+//            let t = audioPlayer.duration
+            let t = audioPlayer.currentItem!.duration.seconds
             //计算百分比
             let pro:CGFloat = CGFloat(c/t)
             progressBg.layer.frame.size.width = view.frame.size.width * pro
@@ -236,7 +248,11 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
             firstLoadMusic()
         }
     }
-
+//*****************************************
+//界面首次载入初始化 viewDidLoad()
+//
+//
+//*****************************************
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "🐷界面"
@@ -248,16 +264,15 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
         geQuLieBiao.backgroundColor = UIColor.clearColor()
        
 //        播放结束通知
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "didFinishPlayer", name: MPMoviePlayerPlaybackDidFinishNotification, object: audioPlayer)
-        
-      print(self.btnOrderGet.layer.position)
-        print(self.preBtn.layer.position)
-        print(self.pauseBtnn.layer.position)
-        print(self.nextBtnn.layer.position)
-        print(self.listBtnn.layer.position)
+//        NSNotificationCenter.defaultCenter().addObserver(self, selector: "didFinishPlayer", name: MPMoviePlayerPlaybackDidFinishNotification, object: audioPlayer)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "didFinishPlayer", name: AVPlayerItemDidPlayToEndTimeNotification, object: self.playItem)
         
     }
-    
+//*****************************************
+//音乐播放器是否自动播放完成
+//
+//
+//*****************************************
     var ifAutoFinish:Bool = true
     func didFinishPlayer(){
         print("hello grandre")
@@ -282,7 +297,11 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
             ifAutoFinish = true
         }
     }
-//    缓存策略
+//*****************************************
+// 图片缓存策略
+//
+//
+//*****************************************
     func getImageFromCache(url:String,imageView:UIImageView){
         if let image = imageCache["url"]{
             imageView.image = image
@@ -294,7 +313,11 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
             })
         }
     }
-    
+//*****************************************
+//首次载入音乐和背景图片，旋转图片
+//
+//
+//*****************************************
     func firstLoadMusic(){
         musicPlayerGR(0)
     }
@@ -304,6 +327,12 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
         
     }
 
+    
+//*****************************************
+// viewWillAppear
+// 界面动画初始化
+//
+//*****************************************
     override func viewWillAppear(animated: Bool) {
         self.navigationController?.navigationBar.hidden = true
     
@@ -341,6 +370,11 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
   
        
     }
+//*****************************************
+// 歌曲列表的定义
+//    
+//    
+//*****************************************
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return gequData.count

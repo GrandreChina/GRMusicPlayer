@@ -21,6 +21,8 @@
 		B19A2A221C35558B006C4C92 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B19A2A211C35558B006C4C92 /* Assets.xcassets */; };
 		B19A2A251C35558B006C4C92 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B19A2A231C35558B006C4C92 /* LaunchScreen.storyboard */; };
 		B19A2A301C362499006C4C92 /* xuanzhuanfengmian.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19A2A2F1C362499006C4C92 /* xuanzhuanfengmian.swift */; };
+		B1A59E811C4E7D6500C9A98C /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1A59E801C4E7D6500C9A98C /* Alamofire.framework */; };
+		B1A59E831C4E7DA600C9A98C /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1A59E821C4E7DA600C9A98C /* SwiftyJSON.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -56,6 +58,8 @@
 		B19A2A241C35558B006C4C92 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B19A2A261C35558B006C4C92 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B19A2A2F1C362499006C4C92 /* xuanzhuanfengmian.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = xuanzhuanfengmian.swift; sourceTree = "<group>"; };
+		B1A59E801C4E7D6500C9A98C /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = "Pods/../build/Debug-iphoneos/Alamofire.framework"; sourceTree = "<group>"; };
+		B1A59E821C4E7DA600C9A98C /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = "Pods/../build/Debug-iphoneos/SwiftyJSON.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +67,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B1A59E831C4E7DA600C9A98C /* SwiftyJSON.framework in Frameworks */,
+				B1A59E811C4E7D6500C9A98C /* Alamofire.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -145,6 +151,8 @@
 		F91D76DFEB12F1137B136F92 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B1A59E821C4E7DA600C9A98C /* SwiftyJSON.framework */,
+				B1A59E801C4E7D6500C9A98C /* Alamofire.framework */,
 				1A0DC5BBC01E376A355AFCB7 /* Pods.framework */,
 			);
 			name = Frameworks;
