@@ -13,6 +13,7 @@ extension SwiftNotice{
     static func showTextAutoGR(text: String,autoClear:Bool = true,time:NSTimeInterval = 1) {
         let window = UIWindow()
         window.backgroundColor = UIColor.clearColor()
+        
         let mainView = UIView()
         mainView.layer.cornerRadius = 12
         mainView.backgroundColor = UIColor(red:0, green:0, blue:0, alpha: 0.8)

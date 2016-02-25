@@ -11,8 +11,20 @@ import Alamofire
 import SwiftyJSON
 import MediaPlayer
 import AVFoundation
+import CircleSlider
 
 class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate,HTTPProtocol{
+    
+    var ifFirstLogin = true
+    var animation音乐波动:GRMusicAnimation!
+    
+    @IBOutlet weak var currentPlayer背景: UIView!
+    @IBOutlet weak var currentPlayerImage: UIImageView!
+    @IBOutlet weak var currentPlayerLabel: UILabel!
+    @IBOutlet weak var currentPlayerBtn: CurrentPlayerBtn!
+    
+    var slider: CircleSlider!
+    @IBOutlet weak var slider圆形容器: UIView!
     
     @IBOutlet weak var rotationt头像y约束: NSLayoutConstraint!
     @IBOutlet weak var progressBg2: UIImageView!
@@ -25,7 +37,6 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
     @IBOutlet weak var StackView_Button: UIStackView!
 
     @IBOutlet weak var preBtn: UIButton!
- 
     @IBOutlet weak var pauseBtnn: pauseBtn!
     @IBOutlet weak var btnOrderGet: orderBtn!
     @IBOutlet weak var nextBtnn: UIButton!
@@ -76,8 +87,10 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
         objectAnimate(sender)
         if sender.isPlay{
             audioPlayer.play()
+            self.animation音乐波动.GRAnimateStart()
         }else{
             audioPlayer.pause()
+            self.animation音乐波动.GRAnimateStop()
         }
         
     }
@@ -88,12 +101,12 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
 //*****************************************
     func objectAnimate(object:AnyObject){
         
-            let keyAnimate = CAKeyframeAnimation(keyPath: "transform.rotation")
+        let keyAnimate = CAKeyframeAnimation(keyPath: "transform.rotation")
         
-            keyAnimate.values = [ -0.3, 0.3, -0.3,0.3,0]
+        keyAnimate.values = [ -0.3, 0.3, -0.3,0.3,0]
      
         
-            let scaleAnimate = CAKeyframeAnimation(keyPath: "transform.scale")
+        let scaleAnimate = CAKeyframeAnimation(keyPath: "transform.scale")
             scaleAnimate.values = [1.1,1.2,1.1,1]
         
         let groupAnimation = CAAnimationGroup()
@@ -105,47 +118,43 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
         
         groupAnimation.delegate = self
         groupAnimation.repeatCount = 1
-        
-        
-        
+
         object.layer.addAnimation(groupAnimation, forKey: "aaa")
         
     }
-//    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-//        animate屏保()
-//    }
-    func animate屏保(){
-       
-        let path = UIBezierPath()
-        let point = UIScreen.mainScreen().bounds.size
-        path.moveToPoint(CGPointMake(point.width/2, point.height))
+//*****************************************
+//crcilSlider的动画
+//
+//
+//*****************************************
+    var options = [
+//        CircleSliderOption.BarColor(UIColor(red: 198/255, green: 244/255, blue: 23/255, alpha: 0.2)),
+        CircleSliderOption.BarColor(UIColor.clearColor()),
+        .ThumbColor(UIColor(red: 196/255, green: 82/255, blue: 181/255, alpha: 1)),
+        .TrackingColor(UIColor(red: 59/255, green: 255/255, blue: 60/255, alpha: 1)),
+        .BarWidth(4),
+        .StartAngle(-90),
+        .MaxValue(100),
+        .MinValue(0)
+    ]
+    func slider圆形初始化(){
         
-        //这是二次贝塞尔曲线的接口，利用此接口，可以定义一条贝塞尔曲线轨迹
-        path.addCurveToPoint(CGPointMake(point.width/2, point.height - 300), controlPoint1: CGPointMake(point.width/2 - 50, point.height - 75), controlPoint2: CGPointMake(point.width/2 + 50 , point.height - 225))
-        //        path.addQuadCurveToPoint(CGPointMake(400, 150), controlPoint: CGPointMake(225, 300))
+        print("slider已经初始化")
+        
+        slider = CircleSlider(frame: self.slider圆形容器.bounds, options: options)
+        slider.addTarget(self, action: "sliderValueChange", forControlEvents: UIControlEvents.ValueChanged)
+        slider.enabled = false
+        
+        self.slider圆形容器.addSubview(slider)
+        self.slider圆形容器.backgroundColor = UIColor.clearColor()
         
         
-        let plane = UIImageView(frame: CGRectMake(0, 0, 85, 60))
-        //这里可以放一张飞机图片
-        plane.image = UIImage(named: "logo")
-        plane.center = CGPointMake(0, 150)
-        plane.layer.anchorPoint = CGPointMake(0.5, 0.5)
-        self.view.addSubview(plane)
-        
-        let animate = CAKeyframeAnimation(keyPath: "position")
-        animate.duration = 4
-        animate.path = path.CGPath
-        animate.fillMode = kCAFillModeForwards
-        animate.removedOnCompletion = false
-        animate.delegate = self
-        
-        //设置此属性，可以使得飞机在飞行时自动调整角度
-        animate.rotationMode = kCAAnimationRotateAuto
-        
-        //        animate.setValue(plane.layer, forKey: "plane.layer")
-        plane.layer.addAnimation(animate, forKey: "animateTestThree")
     }
-    
+    func sliderValueChange(){
+//        print(slider.value)
+    }
+  
+ 
     let http = HTTPController()
     var channelData:[JSON] = []
     var gequData:[JSON] = []
@@ -161,6 +170,7 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
     var timer:NSTimer?
     
     var cellIndex:Int = 0
+    var cellIndexWithRowAndSection:NSIndexPath?
 //*****************************************
 //接受到url后音乐播放
 //
@@ -176,6 +186,7 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
         playItem =  AVPlayerItem(URL: NSURL(string: url)!)
         audioPlayer = AVPlayer(playerItem: playItem)
         audioPlayer.play()
+//        audioPlayer.currentItem?.duration.seconds
         
         timer?.invalidate()
         timePlayer.text = "00:00"
@@ -185,39 +196,48 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
         let pictureUrl = gequData[index]["picture"].string!
         getImageFromCache(pictureUrl, imageView: self.RorationImage)
         getImageFromCache(pictureUrl, imageView: self.blackGroundImageView)
+        getImageFromCache(pictureUrl, imageView: currentPlayerImage)
+        
+        
+
+        let current播放音乐歌名 = gequData[index]["title"].string
+        self.currentPlayerBtn.setTitle(current播放音乐歌名, forState: .Normal)
+        
     }
 
     
     func update(){
-//        let c = audioPlayer.currentPlaybackTime
+
         let c = audioPlayer.currentTime().seconds
-        var time = ""
+       
         if c > 0.0{  // c>0.0 必须判断
-//            let t = audioPlayer.duration
+
             let t = audioPlayer.currentItem!.duration.seconds
             //计算百分比
             let pro:CGFloat = CGFloat(c/t)
             progressBg.layer.frame.size.width = view.frame.size.width * pro
-//            progressBg.frame.size = CGSize(width:view.frame.size.width * pro , height: 40)
+            
+            self.slider.value = Float(pro)*100
           
             let intC = Int(c)
             let s = intC % 60
             let m = intC / 60
-            if m < 10{
-                time = "0\(m):"
-            }else{
-                time = "\(m):"
-            }
+//            if m < 10{
+//                time = "0\(m):"
+//            }else{
+//                time = "\(m):"
+//            }
+//            
+//            if s < 10{
+//                time += "0\(s)"
+//            }else{
+//                time += "\(s)"
+//            }
+            let resu = NSString(format: "%02d:%02d", m,s)
             
-            if s < 10{
-                time += "0\(s)"
-            }else{
-                time += "\(s)"
-            }
+            timePlayer.text = resu as String
             
-            timePlayer.text = time
         }
-//        self.objectAnimate(self.RorationImage)
     }
 //   回调方法
     func getChannelIdFromPinDaoLieBiao(channel:String)->Void{
@@ -231,6 +251,9 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
                 destV.sendChannelIdtoViewController = self.getChannelIdFromPinDaoLieBiao
                 destV.channelData = self.channelData
                 destV.getBackgroundView = self.blackGroundImageView.image
+//               关闭音乐波动动画，不然在下一视图中会卡顿
+                self.animation音乐波动.GRAnimateStop()
+                
             }
     }
 //    委托协议方法
@@ -263,9 +286,15 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
         
         geQuLieBiao.backgroundColor = UIColor.clearColor()
        
-//        播放结束通知
-//        NSNotificationCenter.defaultCenter().addObserver(self, selector: "didFinishPlayer", name: MPMoviePlayerPlaybackDidFinishNotification, object: audioPlayer)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "didFinishPlayer", name: AVPlayerItemDidPlayToEndTimeNotification, object: self.playItem)
+        
+        slider圆形初始化()
+        currentPlayer背景设置()
+        currentPlayerImage设置()
+        
+        animation音乐波动构造函数()
+        currentPlayerBtn响应事件()
+        
         
     }
 //*****************************************
@@ -327,7 +356,24 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
         
     }
 
-    
+    override func viewWillLayoutSubviews() {
+        print("viewWillLayoutSubviews")
+    }
+    override func viewDidLayoutSubviews() {
+//        print(self.geQuLieBiao.frame)
+        print("viewDidLayoutSubviews")
+//        self.animation音乐波动.frame = self.geQuLieBiao.frame
+    }
+    override func viewDidAppear(animated: Bool) {
+        print("viewdidappear")
+        print(self.geQuLieBiao.frame)
+        self.animation音乐波动.frame = self.geQuLieBiao.frame
+//        animation音乐波动构造函数()
+//        self.animation音乐波动.GRAnimateStart()
+    }
+    override func viewWillDisappear(animated: Bool) {
+        print("viewWillDisappear")
+    }
 //*****************************************
 // viewWillAppear
 // 界面动画初始化
@@ -337,21 +383,33 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
         self.navigationController?.navigationBar.hidden = true
     
         RorationImage.stAnimation()
-        
-        
+        if ifFirstLogin{
+            ifFirstLogin = !ifFirstLogin
+        }else{
+            self.currentPlayerBtn.animateSpring(true)
+        }
+
 //      UIView动画的前奏设置
         self.RorationImage.transform = CGAffineTransformMakeScale(2, 2)
         self.RorationImage.layer.position.y = -210
-//        self.StackView_Button.layer.position.y = -228
+        
+        self.slider圆形容器.transform = CGAffineTransformMakeScale(2, 2)
+        self.slider圆形容器.layer.position.y = -210
+
         self.StackView_Button.transform = CGAffineTransformMakeScale(0, 0)
         
         UIView.animateWithDuration(1, delay: 0, usingSpringWithDamping: 0.3, initialSpringVelocity: 15, options: UIViewAnimationOptions.CurveEaseIn, animations: { () -> Void in
             self.RorationImage.transform = CGAffineTransformMakeScale(1, 1)
             self.RorationImage.layer.position.y = 10 + 200
+            
+            self.slider圆形容器.transform = CGAffineTransformMakeScale(1, 1)
+            self.slider圆形容器.layer.position.y = 10 + 200
+            
 //            self.StackView_Button.layer.position.y = 228
             self.StackView_Button.transform = CGAffineTransformMakeScale(1, 1)
             }) { (finish) -> Void in
                 self.RorationImage.transform = CGAffineTransformIdentity
+                
                 print(finish)
         }
         
@@ -367,7 +425,8 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
         self.geQuLieBiao.layer.addAnimation(caTransition, forKey: "111")
 
         
-  
+        
+        self.animation音乐波动.GRAnimateStart()
        
     }
 //*****************************************
@@ -402,10 +461,30 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
   
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         ifAutoFinish = false
+        cellIndexWithRowAndSection = indexPath
         cellIndex = indexPath.row
-        musicPlayerGR(indexPath.row)
-    }
+
+        self.pauseBtnn.isPlay = true
+        self.pauseBtnn.setImage(UIImage(named: "pause"), forState: UIControlState.Normal)
+        self.animation音乐波动.GRAnimateStop()
+
+        delay(0.2) { () -> () in
+        self.animation音乐波动.GRAnimateStart()
+        print("laile")
+        }
+     
     
+        musicPlayerGR(indexPath.row)
+        
+    }
+//    GCD
+    func delay(second:Double,block:()->()){
+        let Second = second * Double(NSEC_PER_SEC)  //0指等待0秒播放动画
+        let dtime = dispatch_time(DISPATCH_TIME_NOW, Int64(Second))
+        dispatch_after(dtime, dispatch_get_main_queue(), block)
+    }
+
+
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         cell.layer.transform = CATransform3DMakeScale(0.1, 0.1, 1)
         UIView.animateWithDuration(0.5) { () -> Void in
@@ -413,6 +492,48 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
         }
     }
    
+//*****************************************
+// currentPlayer背景设置
+//
+//
+//*****************************************
+    func currentPlayer背景设置(){
+        currentPlayer背景.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.2)
+//        currentPlayer背景.backgroundColor = UIColor.clearColor()
+//        父视图设置alpha时候，会对子视图产生影响。
+//        currentPlayer背景.layer.opacity = 1
+//      currentPlayer背景.alpha = 1 效果一样，设置之后对整个视图包括子视图都被更改
+        
+    }
+    func currentPlayerImage设置(){
+        currentPlayerImage.layer.cornerRadius = 10
+        currentPlayerImage.layer.masksToBounds = true
+        //currentPlayerImage.contentMode = .ScaleAspectFill  与下面一样
+        currentPlayerImage.layer.contentsGravity = kCAGravityResizeAspectFill
+        currentPlayerImage.layer.borderColor = UIColor(red: 95/255, green: 222/255, blue: 68/255, alpha: 1).CGColor
+        currentPlayerImage.layer.borderWidth = 3
+    }
+    
+    func animation音乐波动构造函数(){
+        
+        animation音乐波动 = GRMusicAnimation(rect: self.geQuLieBiao.frame, number: 30)
+        self.view.addSubview(animation音乐波动)
+        self.view.bringSubviewToFront(geQuLieBiao)
+//        animation音乐波动.setNeedsLayout()
+//        animation音乐波动.setNeedsUpdateConstraints()
+        self.view.sendSubviewToBack(blackGroundImageView)
+        
+        
+    }
+    func currentPlayerBtn响应事件(){
+        currentPlayerBtn.addTarget(self, action: "btn响应事件", forControlEvents: UIControlEvents.TouchUpInside)
+        
+    }
+ 
+    func btn响应事件(){
+        
+    }
+    
     
 }
 

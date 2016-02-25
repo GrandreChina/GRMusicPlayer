@@ -18,6 +18,7 @@ class PinDaoViewController: UIViewController,UITableViewDataSource,UITableViewDe
     var channelData:[JSON] = []
     var sendChannelIdtoViewController:((String)->Void)!
     var getBackgroundView:UIImage!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         backgroundView.frame = self.view.frame
@@ -72,6 +73,7 @@ class PinDaoViewController: UIViewController,UITableViewDataSource,UITableViewDe
     func function(){
         self.navigationController?.popViewControllerAnimated(true)
     }
+    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return channelData.count
     }

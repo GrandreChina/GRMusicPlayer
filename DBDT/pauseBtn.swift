@@ -19,10 +19,10 @@ class pauseBtn: UIButton {
     let imgPlay:UIImage = UIImage(named: "play")!
     let imgPause:UIImage = UIImage(named: "pause")!
     
-    func isPlayState(){
-        isPlay = true
-        self.setImage(imgPause, forState: UIControlState.Normal)
-    }
+//    func isPlayState(){
+//        isPlay = true
+//        self.setImage(imgPause, forState: UIControlState.Normal)
+//    }
     
     func isChangeState(){
         isPlay = !isPlay

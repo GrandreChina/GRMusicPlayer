@@ -21,8 +21,12 @@
 		B19A2A221C35558B006C4C92 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B19A2A211C35558B006C4C92 /* Assets.xcassets */; };
 		B19A2A251C35558B006C4C92 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B19A2A231C35558B006C4C92 /* LaunchScreen.storyboard */; };
 		B19A2A301C362499006C4C92 /* xuanzhuanfengmian.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19A2A2F1C362499006C4C92 /* xuanzhuanfengmian.swift */; };
-		B1A59E811C4E7D6500C9A98C /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1A59E801C4E7D6500C9A98C /* Alamofire.framework */; };
 		B1A59E831C4E7DA600C9A98C /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1A59E821C4E7DA600C9A98C /* SwiftyJSON.framework */; };
+		B1DD31281C507D5B0095EE0E /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1DD31261C507D5B0095EE0E /* Alamofire.framework */; };
+		B1DD31291C507D5B0095EE0E /* CircleSlider.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1DD31271C507D5B0095EE0E /* CircleSlider.framework */; };
+		B1DD312F1C51C71E0095EE0E /* CurrentPlayerBtn.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1DD312E1C51C71E0095EE0E /* CurrentPlayerBtn.swift */; };
+		B1DD31571C53771A0095EE0E /* GRMusicAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1DD31561C53771A0095EE0E /* GRMusicAnimation.swift */; };
+		D564F54B65437AF42D69F8F0 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A0DC5BBC01E376A355AFCB7 /* Pods.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -60,6 +64,10 @@
 		B19A2A2F1C362499006C4C92 /* xuanzhuanfengmian.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = xuanzhuanfengmian.swift; sourceTree = "<group>"; };
 		B1A59E801C4E7D6500C9A98C /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = "Pods/../build/Debug-iphoneos/Alamofire.framework"; sourceTree = "<group>"; };
 		B1A59E821C4E7DA600C9A98C /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = "Pods/../build/Debug-iphoneos/SwiftyJSON.framework"; sourceTree = "<group>"; };
+		B1DD31261C507D5B0095EE0E /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = "Pods/../build/Debug-iphoneos/Alamofire.framework"; sourceTree = "<group>"; };
+		B1DD31271C507D5B0095EE0E /* CircleSlider.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CircleSlider.framework; path = "Pods/../build/Debug-iphoneos/CircleSlider.framework"; sourceTree = "<group>"; };
+		B1DD312E1C51C71E0095EE0E /* CurrentPlayerBtn.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentPlayerBtn.swift; sourceTree = "<group>"; };
+		B1DD31561C53771A0095EE0E /* GRMusicAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GRMusicAnimation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,8 +75,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B1DD31281C507D5B0095EE0E /* Alamofire.framework in Frameworks */,
+				B1DD31291C507D5B0095EE0E /* CircleSlider.framework in Frameworks */,
 				B1A59E831C4E7DA600C9A98C /* SwiftyJSON.framework in Frameworks */,
-				B1A59E811C4E7D6500C9A98C /* Alamofire.framework in Frameworks */,
+				D564F54B65437AF42D69F8F0 /* Pods.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -135,6 +145,8 @@
 				B18DD3521C3BF959000FECCF /* pauseBtn.swift */,
 				B18DD3541C3CA50C000FECCF /* orderBtn.swift */,
 				B18DD3561C3CB65D000FECCF /* progressView.swift */,
+				B1DD312E1C51C71E0095EE0E /* CurrentPlayerBtn.swift */,
+				B1DD31561C53771A0095EE0E /* GRMusicAnimation.swift */,
 			);
 			name = V;
 			sourceTree = "<group>";
@@ -151,6 +163,8 @@
 		F91D76DFEB12F1137B136F92 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B1DD31261C507D5B0095EE0E /* Alamofire.framework */,
+				B1DD31271C507D5B0095EE0E /* CircleSlider.framework */,
 				B1A59E821C4E7DA600C9A98C /* SwiftyJSON.framework */,
 				B1A59E801C4E7D6500C9A98C /* Alamofire.framework */,
 				1A0DC5BBC01E376A355AFCB7 /* Pods.framework */,
@@ -283,6 +297,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B1DD31571C53771A0095EE0E /* GRMusicAnimation.swift in Sources */,
 				B19A2A1D1C35558B006C4C92 /* ViewController.swift in Sources */,
 				B18DD34F1C3A72D1000FECCF /* HTTPController.swift in Sources */,
 				B18DD3531C3BF959000FECCF /* pauseBtn.swift in Sources */,
@@ -292,6 +307,7 @@
 				B18DD3551C3CA50C000FECCF /* orderBtn.swift in Sources */,
 				B18DD3571C3CB65D000FECCF /* progressView.swift in Sources */,
 				B19A2A1B1C35558B006C4C92 /* AppDelegate.swift in Sources */,
+				B1DD312F1C51C71E0095EE0E /* CurrentPlayerBtn.swift in Sources */,
 				B15E7C2A1C3D4BB0007A23D5 /* PinDaoViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -407,10 +423,6 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/build/Debug-iphoneos",
-				);
 				INFOPLIST_FILE = DBDT/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Grandre.DBDT;
@@ -428,10 +440,6 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/build/Debug-iphoneos",
-				);
 				INFOPLIST_FILE = DBDT/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Grandre.DBDT;
